@@ -37,8 +37,46 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell11
-        cell.vc1 = self
-        cell.imagess = [image[indexPath.item]]
+		
+		cell.imageURLs = image[indexPath.item].images
+		
+		cell.didSelectAction = {
+			
+			(innerPath) in
+			
+			print("\n\t--- \n\t--- \nCell number", innerPath.row, "on row", indexPath.row, "was tapped! \n\t--- \n\t---")
+//			print("Cell was tapped:", indexPath, " / ", innerPath)
+			
+			self.showDetailsView(indexPath, cellPath: innerPath)
+			
+		}
+		
         return cell
     }
+	
+	func showDetailsView(_ rowPath: IndexPath, cellPath: IndexPath ) -> Void {
+
+		let thisModel = image[rowPath.row]
+		let imageURLs = thisModel.images
+		
+		if let vc2 = self.storyboard?.instantiateViewController(withIdentifier: "ViewController2") as? ViewController2 {
+
+			vc2.photo = imageURLs
+			
+			let backItem = UIBarButtonItem()
+			backItem.title = ""
+			self.navigationItem.backBarButtonItem = backItem
+			self.navigationController?.pushViewController(vc2, animated: true)
+
+		}
+		
+		//			let vc2 = vc1!.storyboard?.instantiateViewController(withIdentifier: "ViewController2") as! ViewController2
+		//			let backItem = UIBarButtonItem()
+		//			backItem.title = ""
+		//			vc1!.navigationItem.backBarButtonItem = backItem
+		//			vc1!.navigationController?.pushViewController(vc2, animated: true)
+
+		
+	}
+	
 }
